@@ -27,9 +27,9 @@ interface RegionFormProps {
 
 export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 justify-between w-full items-center">
+        <div className="flex gap-3 justify-between w-full items-center">
           <ToggleGroup
             value={[region.align]}
             disabled={!region.enabled}

@@ -67,7 +67,7 @@ export const defaultLastPageConfig = (
 })
 
 export const defaultConfig: HeaderFooterConfig = {
-  header: defaultRegionConfig({ text: "", enabled: true }),
+  header: defaultRegionConfig({ text: "hwschool.online", enabled: true }),
   footer: defaultRegionConfig({ text: "" }),
   lastPage: defaultLastPageConfig(),
 }

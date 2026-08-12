@@ -104,12 +104,12 @@ function App() {
           <CardHeader>
             <CardTitle>Файлы</CardTitle>
           </CardHeader>
-          <CardContent >
+          <CardContent className="h-full flex-1">
             <FileDropzone files={files} onFilesChange={setFiles} />
           </CardContent>
         </Card>
 
-        <Card className="md:sticky md:top-6 md:h-[calc(100svh-3rem)] no-scrollbar">
+        <Card className="md:sticky md:top-6 md:h-[calc(100svh-3rem)]">
           <CardHeader>
             <CardTitle>Настройки</CardTitle>
           </CardHeader>

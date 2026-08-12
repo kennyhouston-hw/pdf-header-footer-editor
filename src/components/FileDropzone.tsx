@@ -27,7 +27,7 @@ export function FileDropzone({ files, onFilesChange }: FileDropzoneProps) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 md:h-full">
       {files.length > 0 && (
         <div className="flex flex-col gap-2">
           {files.map((f, i) => (
@@ -47,7 +47,7 @@ export function FileDropzone({ files, onFilesChange }: FileDropzoneProps) {
 
       <div
         className={cn(
-          "flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-8 text-center transition-colors",
+          "flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-8 text-center transition-colors md:h-full",
           isDragging ? "border-primary bg-accent" : "border-border",
         )}
         onDragOver={(e) => {
