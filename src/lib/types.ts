@@ -56,7 +56,7 @@ export const defaultRegionConfig = (overrides: Partial<RegionConfig> = {}): Regi
   align: "right",
   fontSize: 10,
   color: "#000000",
-  marginPt: 20,
+  marginPt: 16,
   showLogo: true,
   linkUrl: "https://hwschool.online/",
   utmSource: "",
@@ -77,7 +77,7 @@ export const defaultLastPageConfig = (
   overrides: Partial<LastPageConfig> = {},
 ): LastPageConfig => ({
   enabled: true,
-  marginPt: 20,
+  marginPt: 16,
   showLogo: true,
   leftText: "Материал разработан методической командой детской онлайн-школы Hello World",
   rightText: "Перейти на сайт",

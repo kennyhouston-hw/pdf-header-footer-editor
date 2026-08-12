@@ -211,7 +211,7 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
 
   const fontSize = 10
   const marginPt = config.marginPt
-  const stripPaddingPt = 20
+  const stripPaddingPt = 16
   const logoHeight = 32
   const logoTextGap = 12
   const leftColor = hexToRgb("#666666")
