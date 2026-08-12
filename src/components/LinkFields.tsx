@@ -1,0 +1,67 @@
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { buildLinkUrl } from "@/lib/url"
+
+interface LinkFieldsProps {
+  idPrefix: string
+  disabled?: boolean
+  url: string
+  utmSource: string
+  utmMedium: string
+  onUrlChange: (value: string) => void
+  onUtmSourceChange: (value: string) => void
+  onUtmMediumChange: (value: string) => void
+}
+
+export function LinkFields({
+  idPrefix,
+  disabled,
+  url,
+  utmSource,
+  utmMedium,
+  onUrlChange,
+  onUtmSourceChange,
+  onUtmMediumChange,
+}: LinkFieldsProps) {
+  const finalUrl = buildLinkUrl(url, utmSource, utmMedium)
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor={`${idPrefix}-link-url`}>Ссылка (необязательно)</Label>
+        <Input
+          id={`${idPrefix}-link-url`}
+          value={url}
+          disabled={disabled}
+          onChange={(e) => onUrlChange(e.target.value)}
+          placeholder="https://hwschool.online/"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor={`${idPrefix}-utm-source`}>utm_source</Label>
+          <Input
+            id={`${idPrefix}-utm-source`}
+            value={utmSource}
+            disabled={disabled}
+            onChange={(e) => onUtmSourceChange(e.target.value)}
+            placeholder="pdf"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor={`${idPrefix}-utm-medium`}>utm_medium</Label>
+          <Input
+            id={`${idPrefix}-utm-medium`}
+            value={utmMedium}
+            disabled={disabled}
+            onChange={(e) => onUtmMediumChange(e.target.value)}
+            placeholder="footer"
+          />
+        </div>
+      </div>
+
+      {finalUrl && <p className="truncate text-xs text-muted-foreground">{finalUrl}</p>}
+    </div>
+  )
+}
