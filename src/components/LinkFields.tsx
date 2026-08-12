@@ -26,7 +26,7 @@ export function LinkFields({
   const finalUrl = buildLinkUrl(url, utmSource, utmMedium)
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
         <Label htmlFor={`${idPrefix}-link-url`}>Ссылка (необязательно)</Label>
         <Input
@@ -38,7 +38,7 @@ export function LinkFields({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor={`${idPrefix}-utm-source`}>utm_source</Label>
           <Input

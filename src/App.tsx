@@ -115,7 +115,7 @@ function App() {
           <CardHeader>
             <CardTitle>Настройки</CardTitle>
           </CardHeader>
-          <CardContent className="min-h-0 flex-1 overflow-y-auto">
+          <CardContent className="min-h-0 flex-1 overflow-y-auto scrollbar-none">
             <ConfigPanel />
           </CardContent>
           <CardFooter>

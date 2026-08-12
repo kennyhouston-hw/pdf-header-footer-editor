@@ -82,7 +82,7 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
       <Collapsible>
         <CollapsibleTrigger>Дополнительные настройки</CollapsibleTrigger>
         <CollapsibleContent>
-          <div className="flex flex-col gap-5 pt-4">
+          <div className="flex flex-col gap-5 pt-4 pb-2">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor={`${idPrefix}-fontsize`}>Размер шрифта</Label>
