@@ -12,8 +12,8 @@ import fontkit from "@pdf-lib/fontkit"
 import type { Align, HeaderFooterConfig, LastPageConfig, RegionConfig } from "@/lib/types"
 import { buildLinkUrl } from "@/lib/url"
 
-const FONT_URL = "/fonts/PTSans-Regular.ttf"
-const LOGO_URL = "/images/logo.svg"
+const FONT_URL = `${import.meta.env.BASE_URL}fonts/GolosText-Regular.ttf`
+const LOGO_URL = `${import.meta.env.BASE_URL}images/logo.svg`
 const LOGO_RASTER_SIZE = 256
 
 let cachedFontBytes: ArrayBuffer | null = null
