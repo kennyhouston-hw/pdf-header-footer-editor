@@ -12,7 +12,7 @@ interface LastPageFormProps {
 
 export function LastPageForm({ config, onChange }: LastPageFormProps) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <Label htmlFor="lastpage-enabled">Добавить последнюю страницу</Label>
         <Switch
