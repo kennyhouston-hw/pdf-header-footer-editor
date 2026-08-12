@@ -127,9 +127,6 @@ function App() {
         </Card>
 
         <Card className="md:sticky md:top-6 md:h-[calc(100svh-3rem)]">
-          <CardHeader>
-            <CardTitle>Настройки</CardTitle>
-          </CardHeader>
           <CardContent className="min-h-0 flex-1 overflow-y-auto scrollbar-none">
             <ConfigPanel />
           </CardContent>
