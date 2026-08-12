@@ -85,6 +85,8 @@ function App() {
           results.length === 1 ? "Готово! Файл скачан." : `Готово! Скачано файлов: ${results.length}.`,
         )
       }
+
+      setFiles([])
     } finally {
       setIsProcessing(false)
     }
