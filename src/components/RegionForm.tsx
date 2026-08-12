@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider"
 import { Separator } from "@/components/ui/separator"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { LinkFields } from "@/components/LinkFields"
+import { PaddingFields } from "@/components/PaddingFields"
 import {
   Collapsible,
   CollapsibleContent,
@@ -66,6 +67,17 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
           placeholder="Например: ООО «Компания» — конфиденциально"
         />
       </div>
+
+      <div className="flex items-center justify-between">
+        <Label htmlFor={`${idPrefix}-logo`}>Логотип</Label>
+        <Switch
+          id={`${idPrefix}-logo`}
+          checked={region.showLogo}
+          disabled={!region.enabled}
+          onCheckedChange={(checked) => onChange({ showLogo: checked })}
+        />
+      </div>
+
       <Separator />
       <LinkFields
         idPrefix={idPrefix}
@@ -126,8 +138,6 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
                 className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
-
-            <Separator />
 
             <div className="flex items-center justify-between">
               <Label htmlFor={`${idPrefix}-container`}>Контейнер</Label>
@@ -199,20 +209,22 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor={`${idPrefix}-container-padding`}>Внутренний отступ</Label>
-                <span className="text-sm text-muted-foreground">{region.containerPaddingPt}pt</span>
-              </div>
-              <Slider
-                id={`${idPrefix}-container-padding`}
-                value={[region.containerPaddingPt]}
-                min={0}
-                max={20}
-                step={1}
+            <div className="flex flex-col gap-3">
+              <Label>Отступы</Label>
+              <PaddingFields
+                idPrefix={`${idPrefix}-container-padding`}
                 disabled={!region.enabled || !region.containerEnabled}
-                onValueChange={(val) =>
-                  onChange({ containerPaddingPt: Array.isArray(val) ? val[0] : val })
+                top={region.containerPaddingTop}
+                right={region.containerPaddingRight}
+                bottom={region.containerPaddingBottom}
+                left={region.containerPaddingLeft}
+                onChange={(patch) =>
+                  onChange({
+                    ...(patch.top !== undefined && { containerPaddingTop: patch.top }),
+                    ...(patch.right !== undefined && { containerPaddingRight: patch.right }),
+                    ...(patch.bottom !== undefined && { containerPaddingBottom: patch.bottom }),
+                    ...(patch.left !== undefined && { containerPaddingLeft: patch.left }),
+                  })
                 }
               />
             </div>

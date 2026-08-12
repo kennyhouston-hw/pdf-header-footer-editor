@@ -1,9 +1,12 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
-import { LinkFields } from "@/components/LinkFields"
-import type { LastPageConfig } from "@/lib/types"
+import { Slider } from "@/components/ui/slider"
 import { Separator } from "@/components/ui/separator"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { LinkFields } from "@/components/LinkFields"
+import { PaddingFields } from "@/components/PaddingFields"
+import type { LastPageConfig } from "@/lib/types"
 
 interface LastPageFormProps {
   config: LastPageConfig
@@ -22,16 +25,6 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
         />
       </div>
 
-      <div className="flex items-center justify-between">
-        <Label htmlFor="lastpage-logo">Показывать логотип</Label>
-        <Switch
-          id="lastpage-logo"
-          checked={config.showLogo}
-          disabled={!config.enabled}
-          onCheckedChange={(checked) => onChange({ showLogo: checked })}
-        />
-      </div>
-
       <div className="flex flex-col gap-2">
         <Label htmlFor="lastpage-left">Текст слева</Label>
         <Input
@@ -41,6 +34,17 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
           onChange={(e) => onChange({ leftText: e.target.value })}
         />
       </div>
+
+      <div className="flex items-center justify-between">
+        <Label htmlFor="lastpage-logo">Логотип</Label>
+        <Switch
+          id="lastpage-logo"
+          checked={config.showLogo}
+          disabled={!config.enabled}
+          onCheckedChange={(checked) => onChange({ showLogo: checked })}
+        />
+      </div>
+
       <Separator />
       <div className="flex flex-col gap-2">
         <Label htmlFor="lastpage-right">Текст справа</Label>
@@ -62,6 +66,155 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
         onUtmSourceChange={(value) => onChange({ rightUtmSource: value })}
         onUtmMediumChange={(value) => onChange({ rightUtmMedium: value })}
       />
+
+      <Collapsible>
+        <CollapsibleTrigger>Дополнительные настройки</CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="flex flex-col gap-5 pt-4 pb-2">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="lastpage-margin">Отступ по краям</Label>
+                <span className="text-sm text-muted-foreground">{config.marginPt}pt</span>
+              </div>
+              <Slider
+                id="lastpage-margin"
+                value={[config.marginPt]}
+                min={10}
+                max={72}
+                step={1}
+                disabled={!config.enabled}
+                onValueChange={(val) => onChange({ marginPt: Array.isArray(val) ? val[0] : val })}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="lastpage-right-fontsize">Размер шрифта</Label>
+                <span className="text-sm text-muted-foreground">{config.rightFontSize}pt</span>
+              </div>
+              <Slider
+                id="lastpage-right-fontsize"
+                value={[config.rightFontSize]}
+                min={6}
+                max={24}
+                step={1}
+                disabled={!config.enabled}
+                onValueChange={(val) =>
+                  onChange({ rightFontSize: Array.isArray(val) ? val[0] : val })
+                }
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="lastpage-right-color">Цвет текста</Label>
+              <input
+                id="lastpage-right-color"
+                type="color"
+                value={config.rightColor}
+                disabled={!config.enabled}
+                onChange={(e) => onChange({ rightColor: e.target.value })}
+                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="lastpage-right-container">Контейнер</Label>
+              <Switch
+                id="lastpage-right-container"
+                checked={config.rightContainerEnabled}
+                disabled={!config.enabled}
+                onCheckedChange={(checked) => onChange({ rightContainerEnabled: checked })}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="lastpage-right-container-bg">Цвет фона</Label>
+              <input
+                id="lastpage-right-container-bg"
+                type="color"
+                value={config.rightContainerBackground}
+                disabled={!config.enabled || !config.rightContainerEnabled}
+                onChange={(e) => onChange({ rightContainerBackground: e.target.value })}
+                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="lastpage-right-container-border">Цвет рамки</Label>
+              <input
+                id="lastpage-right-container-border"
+                type="color"
+                value={config.rightContainerBorderColor}
+                disabled={!config.enabled || !config.rightContainerEnabled}
+                onChange={(e) => onChange({ rightContainerBorderColor: e.target.value })}
+                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="lastpage-right-container-border-width">Толщина рамки</Label>
+                <span className="text-sm text-muted-foreground">
+                  {config.rightContainerBorderWidth}pt
+                </span>
+              </div>
+              <Slider
+                id="lastpage-right-container-border-width"
+                value={[config.rightContainerBorderWidth]}
+                min={0}
+                max={4}
+                step={0.5}
+                disabled={!config.enabled || !config.rightContainerEnabled}
+                onValueChange={(val) =>
+                  onChange({ rightContainerBorderWidth: Array.isArray(val) ? val[0] : val })
+                }
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="lastpage-right-container-radius">Радиус скругления</Label>
+                <span className="text-sm text-muted-foreground">
+                  {config.rightContainerBorderRadius}pt
+                </span>
+              </div>
+              <Slider
+                id="lastpage-right-container-radius"
+                value={[config.rightContainerBorderRadius]}
+                min={0}
+                max={20}
+                step={1}
+                disabled={!config.enabled || !config.rightContainerEnabled}
+                onValueChange={(val) =>
+                  onChange({ rightContainerBorderRadius: Array.isArray(val) ? val[0] : val })
+                }
+              />
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Label>Отступы</Label>
+              <PaddingFields
+                idPrefix="lastpage-right-container-padding"
+                disabled={!config.enabled || !config.rightContainerEnabled}
+                top={config.rightContainerPaddingTop}
+                right={config.rightContainerPaddingRight}
+                bottom={config.rightContainerPaddingBottom}
+                left={config.rightContainerPaddingLeft}
+                onChange={(patch) =>
+                  onChange({
+                    ...(patch.top !== undefined && { rightContainerPaddingTop: patch.top }),
+                    ...(patch.right !== undefined && { rightContainerPaddingRight: patch.right }),
+                    ...(patch.bottom !== undefined && {
+                      rightContainerPaddingBottom: patch.bottom,
+                    }),
+                    ...(patch.left !== undefined && { rightContainerPaddingLeft: patch.left }),
+                  })
+                }
+              />
+            </div>
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   )
 }
