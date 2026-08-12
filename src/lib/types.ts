@@ -58,7 +58,7 @@ export const defaultLastPageConfig = (
 ): LastPageConfig => ({
   enabled: true,
   showLogo: true,
-  leftText: "Материал разработан методической командой детской онлайн-школы Hello World.",
+  leftText: "Материал разработан методической командой детской онлайн-школы Hello World",
   rightText: "hwschool.online",
   rightLinkUrl: "https://hwschool.online/",
   rightUtmSource: "",
