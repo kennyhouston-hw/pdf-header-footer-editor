@@ -3,7 +3,7 @@ import { toast } from "sonner"
 import { zipSync } from "fflate"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FileDropzone } from "@/components/FileDropzone"
+import { FileDropzone, type FileMode } from "@/components/FileDropzone"
 import { ConfigPanel } from "@/components/ConfigPanel"
 import { useConfigStore } from "@/store/useConfigStore"
 import { applyHeaderFooter } from "@/lib/pdf"
@@ -37,9 +37,13 @@ function dedupeName(usedNames: Set<string>, name: string) {
 }
 
 function App() {
-  const [files, setFiles] = useState<File[]>([])
+  const [mode, setMode] = useState<FileMode>("single")
+  const [singleFile, setSingleFile] = useState<File | null>(null)
+  const [multipleFiles, setMultipleFiles] = useState<File[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
   const config = useConfigStore((s) => s.config)
+
+  const files = mode === "single" ? (singleFile ? [singleFile] : []) : multipleFiles
 
   const canExport =
     files.length > 0 && (config.header.enabled || config.footer.enabled || config.lastPage.enabled)
@@ -86,7 +90,11 @@ function App() {
         )
       }
 
-      setFiles([])
+      if (mode === "single") {
+        setSingleFile(null)
+      } else {
+        setMultipleFiles([])
+      }
     } finally {
       setIsProcessing(false)
     }
@@ -107,7 +115,14 @@ function App() {
             <CardTitle>Файлы</CardTitle>
           </CardHeader>
           <CardContent className="h-full flex-1">
-            <FileDropzone files={files} onFilesChange={setFiles} />
+            <FileDropzone
+              mode={mode}
+              onModeChange={setMode}
+              singleFile={singleFile}
+              onSingleFileChange={setSingleFile}
+              multipleFiles={multipleFiles}
+              onMultipleFilesChange={setMultipleFiles}
+            />
           </CardContent>
         </Card>
 
