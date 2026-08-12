@@ -8,11 +8,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { LinkFields } from "@/components/LinkFields"
 import { PaddingFields } from "@/components/PaddingFields"
 import { ColorField } from "@/components/ColorField"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import type { RegionConfig } from "@/lib/types"
 
 const alignLabels: Record<RegionConfig["align"], string> = {
@@ -92,10 +87,8 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
       />
 
       <Separator />
-      <Collapsible>
-        <CollapsibleTrigger>Дополнительные настройки</CollapsibleTrigger>
-        <CollapsibleContent>
-          <div className="flex flex-col gap-5 pt-4 pb-2">
+
+      <div className="flex flex-col gap-6 pb-2">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor={`${idPrefix}-fontsize`}>Размер шрифта</Label>
@@ -135,7 +128,7 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
               disabled={!region.enabled}
               onChange={(value) => onChange({ color: value })}
             />
-
+            <Separator />
             <div className="flex items-center justify-between">
               <Label htmlFor={`${idPrefix}-container`}>Контейнер</Label>
               <Switch
@@ -218,8 +211,6 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
               />
             </div>
           </div>
-        </CollapsibleContent>
-      </Collapsible>
     </div>
   )
 }

@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
 import { Separator } from "@/components/ui/separator"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { LinkFields } from "@/components/LinkFields"
 import { PaddingFields } from "@/components/PaddingFields"
 import { ColorField } from "@/components/ColorField"
@@ -67,11 +66,7 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
         onUtmSourceChange={(value) => onChange({ rightUtmSource: value })}
         onUtmMediumChange={(value) => onChange({ rightUtmMedium: value })}
       />
-
-      <Collapsible>
-        <CollapsibleTrigger>Дополнительные настройки</CollapsibleTrigger>
-        <CollapsibleContent>
-          <div className="flex flex-col gap-5 pt-4 pb-2">
+      <div className="flex flex-col gap-6 pb-2">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="lastpage-margin">Отступ по краям</Label>
@@ -113,7 +108,7 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
               disabled={!config.enabled}
               onChange={(value) => onChange({ rightColor: value })}
             />
-
+             <Separator /> 
             <div className="flex items-center justify-between">
               <Label htmlFor="lastpage-right-container">Контейнер</Label>
               <Switch
@@ -202,8 +197,6 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
               />
             </div>
           </div>
-        </CollapsibleContent>
-      </Collapsible>
     </div>
   )
 }
