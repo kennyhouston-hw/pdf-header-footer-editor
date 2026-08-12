@@ -218,7 +218,7 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   const rightColor = hexToRgb(config.rightColor)
   const rightText = config.rightText.trim()
   const rightTextWidth = rightText ? font.widthOfTextAtSize(rightText, config.rightFontSize) : 0
-  const gapPt = 60
+  const gapPt = 40
 
   const rightPadTop = config.rightContainerEnabled ? config.rightContainerPaddingTop : 0
   const rightPadRight = config.rightContainerEnabled ? config.rightContainerPaddingRight : 0
