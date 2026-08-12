@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { LinkFields } from "@/components/LinkFields"
 import { PaddingFields } from "@/components/PaddingFields"
+import { ColorField } from "@/components/ColorField"
 import type { LastPageConfig } from "@/lib/types"
 
 interface LastPageFormProps {
@@ -105,17 +106,13 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="lastpage-right-color">Цвет текста</Label>
-              <input
-                id="lastpage-right-color"
-                type="color"
-                value={config.rightColor}
-                disabled={!config.enabled}
-                onChange={(e) => onChange({ rightColor: e.target.value })}
-                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
+            <ColorField
+              id="lastpage-right-color"
+              label="Цвет текста"
+              value={config.rightColor}
+              disabled={!config.enabled}
+              onChange={(value) => onChange({ rightColor: value })}
+            />
 
             <div className="flex items-center justify-between">
               <Label htmlFor="lastpage-right-container">Контейнер</Label>
@@ -127,29 +124,21 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="lastpage-right-container-bg">Цвет фона</Label>
-              <input
-                id="lastpage-right-container-bg"
-                type="color"
-                value={config.rightContainerBackground}
-                disabled={!config.enabled || !config.rightContainerEnabled}
-                onChange={(e) => onChange({ rightContainerBackground: e.target.value })}
-                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
+            <ColorField
+              id="lastpage-right-container-bg"
+              label="Цвет фона"
+              value={config.rightContainerBackground}
+              disabled={!config.enabled || !config.rightContainerEnabled}
+              onChange={(value) => onChange({ rightContainerBackground: value })}
+            />
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="lastpage-right-container-border">Цвет рамки</Label>
-              <input
-                id="lastpage-right-container-border"
-                type="color"
-                value={config.rightContainerBorderColor}
-                disabled={!config.enabled || !config.rightContainerEnabled}
-                onChange={(e) => onChange({ rightContainerBorderColor: e.target.value })}
-                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
+            <ColorField
+              id="lastpage-right-container-border"
+              label="Цвет рамки"
+              value={config.rightContainerBorderColor}
+              disabled={!config.enabled || !config.rightContainerEnabled}
+              onChange={(value) => onChange({ rightContainerBorderColor: value })}
+            />
 
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">

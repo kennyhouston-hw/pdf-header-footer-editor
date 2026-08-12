@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { LinkFields } from "@/components/LinkFields"
 import { PaddingFields } from "@/components/PaddingFields"
+import { ColorField } from "@/components/ColorField"
 import {
   Collapsible,
   CollapsibleContent,
@@ -127,17 +128,13 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor={`${idPrefix}-color`}>Цвет текста</Label>
-              <input
-                id={`${idPrefix}-color`}
-                type="color"
-                value={region.color}
-                disabled={!region.enabled}
-                onChange={(e) => onChange({ color: e.target.value })}
-                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
+            <ColorField
+              id={`${idPrefix}-color`}
+              label="Цвет текста"
+              value={region.color}
+              disabled={!region.enabled}
+              onChange={(value) => onChange({ color: value })}
+            />
 
             <div className="flex items-center justify-between">
               <Label htmlFor={`${idPrefix}-container`}>Контейнер</Label>
@@ -149,29 +146,21 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor={`${idPrefix}-container-bg`}>Цвет фона</Label>
-              <input
-                id={`${idPrefix}-container-bg`}
-                type="color"
-                value={region.containerBackground}
-                disabled={!region.enabled || !region.containerEnabled}
-                onChange={(e) => onChange({ containerBackground: e.target.value })}
-                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
+            <ColorField
+              id={`${idPrefix}-container-bg`}
+              label="Цвет фона"
+              value={region.containerBackground}
+              disabled={!region.enabled || !region.containerEnabled}
+              onChange={(value) => onChange({ containerBackground: value })}
+            />
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor={`${idPrefix}-container-border`}>Цвет рамки</Label>
-              <input
-                id={`${idPrefix}-container-border`}
-                type="color"
-                value={region.containerBorderColor}
-                disabled={!region.enabled || !region.containerEnabled}
-                onChange={(e) => onChange({ containerBorderColor: e.target.value })}
-                className="h-8 w-14 cursor-pointer rounded border disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
+            <ColorField
+              id={`${idPrefix}-container-border`}
+              label="Цвет рамки"
+              value={region.containerBorderColor}
+              disabled={!region.enabled || !region.containerEnabled}
+              onChange={(value) => onChange({ containerBorderColor: value })}
+            />
 
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
