@@ -1,7 +1,6 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { buildLinkUrl } from "@/lib/url"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
 
 interface LinkFieldsProps {
   idPrefix: string
@@ -41,32 +40,28 @@ export function LinkFields({
 
       <div className="grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-2">
-          <InputGroup>
-          <InputGroupAddon className="text-xs">
+          <Label htmlFor={`${idPrefix}-utm-source`} className="text-xs text-muted-foreground">
             utm_source
-          </InputGroupAddon>
-          <InputGroupInput
+          </Label>
+          <Input
             id={`${idPrefix}-utm-source`}
             value={utmSource}
             disabled={disabled}
             onChange={(e) => onUtmSourceChange(e.target.value)}
             placeholder="pdf"
           />
-          </InputGroup>
         </div>
         <div className="flex flex-col gap-2">
-          <InputGroup>
-          <InputGroupAddon className="text-xs">
+          <Label htmlFor={`${idPrefix}-utm-medium`} className="text-xs text-muted-foreground">
             utm_medium
-          </InputGroupAddon>
-          <InputGroupInput
+          </Label>
+          <Input
             id={`${idPrefix}-utm-medium`}
             value={utmMedium}
             disabled={disabled}
             onChange={(e) => onUtmMediumChange(e.target.value)}
             placeholder="footer"
           />
-          </InputGroup>
         </div>
       </div>
 
