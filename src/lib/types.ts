@@ -24,7 +24,8 @@ export interface RegionConfig {
 
 export interface LastPageConfig {
   enabled: boolean
-  marginPt: number
+  marginX: number
+  marginY: number
   showLogo: boolean
   leftText: string
   rightText: string
@@ -77,7 +78,8 @@ export const defaultLastPageConfig = (
   overrides: Partial<LastPageConfig> = {},
 ): LastPageConfig => ({
   enabled: true,
-  marginPt: 16,
+  marginX: 16,
+  marginY: 16,
   showLogo: true,
   leftText: "Материал разработан методической командой детской онлайн-школы Hello World",
   rightText: "Перейти на сайт",

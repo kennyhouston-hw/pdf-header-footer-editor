@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { buildLinkUrl } from "@/lib/url"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
 
 interface LinkFieldsProps {
   idPrefix: string
@@ -26,9 +27,9 @@ export function LinkFields({
   const finalUrl = buildLinkUrl(url, utmSource, utmMedium)
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor={`${idPrefix}-link-url`}>Ссылка (необязательно)</Label>
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
+        <Label htmlFor={`${idPrefix}-link-url`}>Ссылка</Label>
         <Input
           id={`${idPrefix}-link-url`}
           value={url}
@@ -38,30 +39,38 @@ export function LinkFields({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-2">
-          <Label htmlFor={`${idPrefix}-utm-source`}>utm_source</Label>
-          <Input
+          <InputGroup>
+          <InputGroupAddon className="text-xs">
+            utm_source
+          </InputGroupAddon>
+          <InputGroupInput
             id={`${idPrefix}-utm-source`}
             value={utmSource}
             disabled={disabled}
             onChange={(e) => onUtmSourceChange(e.target.value)}
             placeholder="pdf"
           />
+          </InputGroup>
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor={`${idPrefix}-utm-medium`}>utm_medium</Label>
-          <Input
+          <InputGroup>
+          <InputGroupAddon className="text-xs">
+            utm_medium
+          </InputGroupAddon>
+          <InputGroupInput
             id={`${idPrefix}-utm-medium`}
             value={utmMedium}
             disabled={disabled}
             onChange={(e) => onUtmMediumChange(e.target.value)}
             placeholder="footer"
           />
+          </InputGroup>
         </div>
       </div>
 
-      {finalUrl && <p className="truncate text-xs text-muted-foreground">{finalUrl}</p>}
+      {finalUrl && <p className="truncate text-xs text-muted-foreground mt-1">{finalUrl}</p>}
     </div>
   )
 }

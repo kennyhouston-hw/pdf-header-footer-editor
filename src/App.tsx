@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { toast } from "sonner"
 import { zipSync } from "fflate"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FileDropzone, type FileMode } from "@/components/FileDropzone"
 import { ConfigPanel } from "@/components/ConfigPanel"
@@ -109,11 +109,8 @@ function App() {
         </p>
       </header> */}
 
-      <div className="grid gap-6 md:grid-cols-[1fr_480px] md:items-start">
+      <div className="grid gap-6 md:grid-cols-[1fr_360px] md:items-start">
         <Card className="md:h-[calc(100svh-3rem)]">
-          <CardHeader>
-            <CardTitle>Файлы</CardTitle>
-          </CardHeader>
           <CardContent className="h-full flex-1">
             <FileDropzone
               mode={mode}
@@ -127,7 +124,7 @@ function App() {
         </Card>
 
         <Card className="md:sticky md:top-6 md:h-[calc(100svh-3rem)]">
-          <CardContent className="flex min-h-0 flex-1 flex-col">
+          <CardContent className="flex min-h-0 flex-1 flex-col p-0">
             <ConfigPanel />
           </CardContent>
           <CardFooter>

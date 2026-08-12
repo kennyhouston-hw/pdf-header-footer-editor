@@ -1,9 +1,18 @@
 import { useState } from "react"
-import { MaximizeIcon, MinimizeIcon } from "lucide-react"
+import {
+  ArrowDownToLineIcon,
+  ArrowLeftToLineIcon,
+  ArrowRightToLineIcon,
+  ArrowUpToLineIcon,
+  MaximizeIcon,
+  MinimizeIcon,
+  MoveHorizontalIcon,
+  MoveVerticalIcon,
+} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 
 interface PaddingFieldsProps {
   idPrefix: string
@@ -42,57 +51,73 @@ export function PaddingFields({
               <FieldLabel htmlFor={`${idPrefix}-padding-left`} className="sr-only">
                 Отступ слева
               </FieldLabel>
-              <Input
-                id={`${idPrefix}-padding-left`}
-                type="number"
-                min={0}
-                disabled={disabled}
-                value={left}
-                onChange={(e) => onChange({ left: toNumber(e.target.value) })}
-                placeholder="Слева"
-              />
+              <InputGroup>
+                <InputGroupAddon>
+                  <ArrowLeftToLineIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  id={`${idPrefix}-padding-left`}
+                  type="number"
+                  min={0}
+                  disabled={disabled}
+                  value={left}
+                  onChange={(e) => onChange({ left: toNumber(e.target.value) })}
+                />
+              </InputGroup>
             </Field>
             <Field>
               <FieldLabel htmlFor={`${idPrefix}-padding-top`} className="sr-only">
                 Отступ сверху
               </FieldLabel>
-              <Input
-                id={`${idPrefix}-padding-top`}
-                type="number"
-                min={0}
-                disabled={disabled}
-                value={top}
-                onChange={(e) => onChange({ top: toNumber(e.target.value) })}
-                placeholder="Сверху"
-              />
+              <InputGroup>
+                <InputGroupAddon>
+                  <ArrowUpToLineIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  id={`${idPrefix}-padding-top`}
+                  type="number"
+                  min={0}
+                  disabled={disabled}
+                  value={top}
+                  onChange={(e) => onChange({ top: toNumber(e.target.value) })}
+                />
+              </InputGroup>
             </Field>
             <Field>
               <FieldLabel htmlFor={`${idPrefix}-padding-right`} className="sr-only">
                 Отступ справа
               </FieldLabel>
-              <Input
-                id={`${idPrefix}-padding-right`}
-                type="number"
-                min={0}
-                disabled={disabled}
-                value={right}
-                onChange={(e) => onChange({ right: toNumber(e.target.value) })}
-                placeholder="Справа"
-              />
+              <InputGroup>
+                <InputGroupAddon>
+                  <ArrowRightToLineIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  id={`${idPrefix}-padding-right`}
+                  type="number"
+                  min={0}
+                  disabled={disabled}
+                  value={right}
+                  onChange={(e) => onChange({ right: toNumber(e.target.value) })}
+                />
+              </InputGroup>
             </Field>
             <Field>
               <FieldLabel htmlFor={`${idPrefix}-padding-bottom`} className="sr-only">
                 Отступ снизу
               </FieldLabel>
-              <Input
-                id={`${idPrefix}-padding-bottom`}
-                type="number"
-                min={0}
-                disabled={disabled}
-                value={bottom}
-                onChange={(e) => onChange({ bottom: toNumber(e.target.value) })}
-                placeholder="Снизу"
-              />
+              <InputGroup>
+                <InputGroupAddon>
+                  <ArrowDownToLineIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  id={`${idPrefix}-padding-bottom`}
+                  type="number"
+                  min={0}
+                  disabled={disabled}
+                  value={bottom}
+                  onChange={(e) => onChange({ bottom: toNumber(e.target.value) })}
+                />
+              </InputGroup>
             </Field>
           </>
         ) : (
@@ -101,33 +126,43 @@ export function PaddingFields({
               <FieldLabel htmlFor={`${idPrefix}-padding-x`} className="sr-only">
                 Отступ слева и справа
               </FieldLabel>
-              <Input
-                id={`${idPrefix}-padding-x`}
-                type="number"
-                min={0}
-                disabled={disabled}
-                value={x}
-                onChange={(e) => {
-                  const value = toNumber(e.target.value)
-                  onChange({ left: value, right: value })
-                }}
-              />
+              <InputGroup>
+                <InputGroupAddon>
+                  <MoveHorizontalIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  id={`${idPrefix}-padding-x`}
+                  type="number"
+                  min={0}
+                  disabled={disabled}
+                  value={x}
+                  onChange={(e) => {
+                    const value = toNumber(e.target.value)
+                    onChange({ left: value, right: value })
+                  }}
+                />
+              </InputGroup>
             </Field>
             <Field>
               <FieldLabel htmlFor={`${idPrefix}-padding-y`} className="sr-only">
                 Отступ сверху и снизу
               </FieldLabel>
-              <Input
-                id={`${idPrefix}-padding-y`}
-                type="number"
-                min={0}
-                disabled={disabled}
-                value={y}
-                onChange={(e) => {
-                  const value = toNumber(e.target.value)
-                  onChange({ top: value, bottom: value })
-                }}
-              />
+              <InputGroup>
+                <InputGroupAddon>
+                  <MoveVerticalIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  id={`${idPrefix}-padding-y`}
+                  type="number"
+                  min={0}
+                  disabled={disabled}
+                  value={y}
+                  onChange={(e) => {
+                    const value = toNumber(e.target.value)
+                    onChange({ top: value, bottom: value })
+                  }}
+                />
+              </InputGroup>
             </Field>
           </>
         )}
@@ -135,7 +170,7 @@ export function PaddingFields({
 
       <Button
         type="button"
-        variant="outline"
+        variant="secondary"
         size="icon"
         disabled={disabled}
         onClick={() => setIsOpen((open) => !open)}

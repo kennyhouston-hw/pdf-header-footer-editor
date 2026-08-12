@@ -55,12 +55,15 @@ export function FileDropzone({
 
   return (
     <div className="flex flex-col gap-3 md:h-full">
+      <div className="flex items-center justify-between">
+        <span className="text-base font-medium">Файлы</span>
       <Tabs value={mode} onValueChange={(value) => onModeChange(value as FileMode)}>
         <TabsList>
-          <TabsTrigger value="single">Один файл</TabsTrigger>
-          <TabsTrigger value="multiple">Несколько файлов</TabsTrigger>
+          <TabsTrigger value="single" className="px-3">Один файл</TabsTrigger>
+          <TabsTrigger value="multiple" className="px-3">Несколько файлов</TabsTrigger>
         </TabsList>
       </Tabs>
+      </div>
 
       {files.length > 0 && (
         <div className="flex flex-col gap-2">

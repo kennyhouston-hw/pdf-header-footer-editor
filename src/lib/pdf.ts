@@ -210,8 +210,8 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   const width = existingPages.length > 0 ? existingPages[existingPages.length - 1].getSize().width : 595.28
 
   const fontSize = 10
-  const marginPt = config.marginPt
-  const stripPaddingPt = 16
+  const marginX = config.marginX
+  const marginY = config.marginY
   const logoHeight = 32
   const logoTextGap = 12
   const leftColor = hexToRgb("#666666")
@@ -233,8 +233,8 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   }
   const logoWidth = logoImage ? logoHeight * (logoImage.width / logoImage.height) : 0
 
-  const leftTextX = marginPt + (logoImage ? logoWidth + logoTextGap : 0)
-  const leftMaxWidth = width - leftTextX - marginPt - (rightText ? rightOuterWidth + gapPt : 0)
+  const leftTextX = marginX + (logoImage ? logoWidth + logoTextGap : 0)
+  const leftMaxWidth = width - leftTextX - marginX - (rightText ? rightOuterWidth + gapPt : 0)
 
   const leftLines = config.leftText.trim()
     ? layoutMultilineText(config.leftText.trim(), {
@@ -255,13 +255,13 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   const lineCount = Math.max(leftLines.length, 1)
   const textVisualHeight = leftLines.length > 0 || rightText ? totalHeight + (lineCount - 1) * lineHeight : 0
   const contentHeight = Math.max(textVisualHeight, logoImage ? logoHeight : 0, totalHeight, rightBlockHeight)
-  const stripHeight = contentHeight + stripPaddingPt * 2
+  const stripHeight = contentHeight + marginY * 2
 
   const page = pdfDoc.addPage([width, stripHeight])
 
   if (logoImage) {
     const logoY = stripHeight / 2 - logoHeight / 2
-    page.drawImage(logoImage, { x: marginPt, y: logoY, width: logoWidth, height: logoHeight })
+    page.drawImage(logoImage, { x: marginX, y: logoY, width: logoWidth, height: logoHeight })
   }
 
   const firstBaseline = stripHeight / 2 + textVisualHeight / 2 - ascent
@@ -277,7 +277,7 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   })
 
   if (rightText) {
-    const boxX = width - marginPt - rightOuterWidth
+    const boxX = width - marginX - rightOuterWidth
     const x = boxX + rightPadLeft
     const y = stripHeight / 2 - (rightAscent - rightDescent) / 2
 

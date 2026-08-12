@@ -9,13 +9,13 @@ export function ConfigPanel() {
   const updateLastPage = useConfigStore((s) => s.updateLastPage)
 
   return (
-    <Tabs defaultValue="header" className="h-full min-h-0">
-      <TabsList className="w-full shrink-0">
+    <Tabs defaultValue="header" className="h-full min-h-0 ">
+      <TabsList className="w-[calc(100%-2rem)] shrink-0 mx-auto flex items-center">
         <TabsTrigger value="header">Header</TabsTrigger>
         <TabsTrigger value="footer">Footer</TabsTrigger>
         <TabsTrigger value="lastpage">Last Page</TabsTrigger>
       </TabsList>
-      <TabsContent value="header" className="min-h-0 flex-1 overflow-y-auto pt-4 scrollbar-none">
+      <TabsContent value="header" className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pt-4 scrollbar-none">
         <RegionForm
           idPrefix="header"
           enabledLabel="Добавить хэдер"
@@ -31,7 +31,7 @@ export function ConfigPanel() {
           onChange={(patch) => updateRegion("footer", patch)}
         />
       </TabsContent>
-      <TabsContent value="lastpage" className="min-h-0 flex-1 overflow-y-auto pt-4 scrollbar-none">
+      <TabsContent value="lastpage" className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pt-4 scrollbar-none">
         <LastPageForm config={config.lastPage} onChange={updateLastPage} />
       </TabsContent>
     </Tabs>
