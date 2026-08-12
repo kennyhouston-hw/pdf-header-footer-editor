@@ -138,7 +138,7 @@ function drawRegion(
   const { ascent, descent } = fontMetrics(font, region.fontSize)
 
   const showLogo = region.showLogo && logoImage !== null
-  const logoHeight = showLogo ? region.fontSize * 1.3 : 0
+  const logoHeight = showLogo ? region.fontSize * 1.5 : 0
   const logoWidth = showLogo ? logoHeight * (logoImage!.width / logoImage!.height) : 0
   const logoGap = showLogo ? region.fontSize * 0.5 : 0
 

@@ -65,7 +65,7 @@ export const defaultRegionConfig = (overrides: Partial<RegionConfig> = {}): Regi
   containerBackground: "#ffffff",
   containerBorderColor: "#e5e5e5",
   containerBorderWidth: 1,
-  containerBorderRadius: 8,
+  containerBorderRadius: 10,
   containerPaddingTop: 6,
   containerPaddingRight: 8,
   containerPaddingBottom: 6,
