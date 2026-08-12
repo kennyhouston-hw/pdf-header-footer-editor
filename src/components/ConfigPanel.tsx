@@ -18,6 +18,7 @@ export function ConfigPanel() {
       <TabsContent value="header" className="pt-4">
         <RegionForm
           idPrefix="header"
+          enabledLabel="Добавить хэдер"
           region={config.header}
           onChange={(patch) => updateRegion("header", patch)}
         />
@@ -25,6 +26,7 @@ export function ConfigPanel() {
       <TabsContent value="footer" className="pt-4">
         <RegionForm
           idPrefix="footer"
+          enabledLabel="Добавить футер"
           region={config.footer}
           onChange={(patch) => updateRegion("footer", patch)}
         />

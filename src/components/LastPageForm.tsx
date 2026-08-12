@@ -25,6 +25,7 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
         />
       </div>
 
+      <Separator />
       <div className="flex flex-col gap-2">
         <Label htmlFor="lastpage-left">Текст слева</Label>
         <Input

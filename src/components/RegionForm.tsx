@@ -20,14 +20,25 @@ interface RegionFormProps {
   region: RegionConfig
   onChange: (patch: Partial<RegionConfig>) => void
   idPrefix: string
+  enabledLabel: string
 }
 
-export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
+export function RegionForm({ region, onChange, idPrefix, enabledLabel }: RegionFormProps) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <div className="flex gap-3 justify-between w-full items-center">
-          <ToggleGroup
+        <Label htmlFor={`${idPrefix}-enabled`}>{enabledLabel}</Label>
+          <Switch
+            id={`${idPrefix}-enabled`}
+            checked={region.enabled}
+            onCheckedChange={(checked) => onChange({ enabled: checked })}
+          />
+        </div>
+
+        <Separator />
+
+        <ToggleGroup
+          className="w-full"
             value={[region.align]}
             disabled={!region.enabled}
             onValueChange={(value) => {
@@ -45,13 +56,7 @@ export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
               <AlignRight />
             </ToggleGroupItem>
           </ToggleGroup>
-          <Switch
-            id={`${idPrefix}-enabled`}
-            checked={region.enabled}
-            onCheckedChange={(checked) => onChange({ enabled: checked })}
-          />
-        </div>
-      </div>
+
 
       <div className="flex flex-col gap-2">
         <Label htmlFor={`${idPrefix}-text`}>Текст</Label>
