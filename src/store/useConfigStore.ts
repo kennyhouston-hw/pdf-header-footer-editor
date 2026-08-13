@@ -13,49 +13,27 @@ interface UtmOverride {
 
 interface ConfigStore {
   config: HeaderFooterConfig
-  footerUtmOverride: UtmOverride
   lastPageUtmOverride: UtmOverride
-  updateRegion: (region: "header" | "footer", patch: Partial<RegionConfig>) => void
+  updateRegion: (patch: Partial<RegionConfig>) => void
   updateLastPage: (patch: Partial<LastPageConfig>) => void
 }
 
 export const useConfigStore = create<ConfigStore>((set) => ({
   config: defaultConfig,
-  footerUtmOverride: { source: false, medium: false },
   lastPageUtmOverride: { source: false, medium: false },
 
-  updateRegion: (region, patch) =>
+  updateRegion: (patch) =>
     set((state) => {
       const config: HeaderFooterConfig = {
         ...state.config,
-        [region]: { ...state.config[region], ...patch },
+        region: { ...state.config.region, ...patch },
       }
 
-      if (region === "header") {
-        if ("utmSource" in patch && !state.footerUtmOverride.source) {
-          config.footer = { ...config.footer, utmSource: patch.utmSource! }
-        }
-        if ("utmMedium" in patch && !state.footerUtmOverride.medium) {
-          config.footer = { ...config.footer, utmMedium: patch.utmMedium! }
-        }
-        if ("utmSource" in patch && !state.lastPageUtmOverride.source) {
-          config.lastPage = { ...config.lastPage, rightUtmSource: patch.utmSource! }
-        }
-        if ("utmMedium" in patch && !state.lastPageUtmOverride.medium) {
-          config.lastPage = { ...config.lastPage, rightUtmMedium: patch.utmMedium! }
-        }
-        return { config }
+      if ("utmSource" in patch && !state.lastPageUtmOverride.source) {
+        config.lastPage = { ...config.lastPage, rightUtmSource: patch.utmSource! }
       }
-
-      // region === "footer": manual edits decouple it from header's auto-sync
-      if ("utmSource" in patch || "utmMedium" in patch) {
-        return {
-          config,
-          footerUtmOverride: {
-            source: state.footerUtmOverride.source || "utmSource" in patch,
-            medium: state.footerUtmOverride.medium || "utmMedium" in patch,
-          },
-        }
+      if ("utmMedium" in patch && !state.lastPageUtmOverride.medium) {
+        config.lastPage = { ...config.lastPage, rightUtmMedium: patch.utmMedium! }
       }
       return { config }
     }),

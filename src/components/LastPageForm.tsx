@@ -1,4 +1,3 @@
-import { MoveHorizontalIcon, MoveVerticalIcon } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
@@ -7,9 +6,14 @@ import { LinkFields } from "@/components/LinkFields"
 import { PaddingFields } from "@/components/PaddingFields"
 import { ColorField } from "@/components/ColorField"
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import type { LastPageConfig } from "@/lib/types"
 import { Checkbox } from "./ui/checkbox"
+
+const modeLabels: Record<LastPageConfig["mode"], string> = {
+  lastPage: "Последняя",
+  everyPage: "На все",
+}
 
 interface LastPageFormProps {
   config: LastPageConfig
@@ -20,7 +24,7 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
   return (
     <div className="flex flex-col gap-5 px-4">
       <div className="flex items-center justify-between">
-        <Label htmlFor="lastpage-enabled">Добавить последнюю страницу</Label>
+        <Label htmlFor="lastpage-enabled">Добавить футер</Label>
         <Switch
           id="lastpage-enabled"
           checked={config.enabled}
@@ -31,40 +35,100 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
       <Separator className="min-w-2xl ml-[-16px]"/>
 
       <div className="flex flex-col gap-2">
-        <Label className="text-xs text-muted-foreground">Отступ по краям</Label>
-        <div className="flex gap-2">
-          <InputGroup>
-            <InputGroupAddon>
-              <MoveHorizontalIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              id="lastpage-margin-x"
+        <Label htmlFor="lastpage-mode" className="text-xs text-muted-foreground">
+          Как добавить
+        </Label>
+        <ToggleGroup
+          id="lastpage-mode"
+          className="w-full"
+          value={[config.mode]}
+          disabled={!config.enabled}
+          onValueChange={(value) => {
+            const next = value[0] as LastPageConfig["mode"] | undefined
+            if (next) onChange({ mode: next })
+          }}
+        >
+          <ToggleGroupItem className="h-[26px] gap-1.5" value="lastPage" aria-label={modeLabels.lastPage}>
+            {modeLabels.lastPage}
+          </ToggleGroupItem>
+          <ToggleGroupItem className="h-[26px] gap-1.5" value="everyPage" aria-label={modeLabels.everyPage}>
+            {modeLabels.everyPage}
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <Separator className="min-w-2xl ml-[-16px]"/>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Label className="text-xs text-muted-foreground">Внутренние отступы</Label>
+          <PaddingFields
+            idPrefix="lastpage-padding"
+            disabled={!config.enabled}
+            top={config.paddingTop}
+            right={config.paddingRight}
+            bottom={config.paddingBottom}
+            left={config.paddingLeft}
+            onChange={(patch) =>
+              onChange({
+                ...(patch.top !== undefined && { paddingTop: patch.top }),
+                ...(patch.right !== undefined && { paddingRight: patch.right }),
+                ...(patch.bottom !== undefined && { paddingBottom: patch.bottom }),
+                ...(patch.left !== undefined && { paddingLeft: patch.left }),
+              })
+            }
+          />
+        </div>
+
+        {config.mode === "everyPage" && (
+          <div className="flex flex-col gap-2">
+            <Label className="text-xs text-muted-foreground">Внешние отступы</Label>
+            <PaddingFields
+              idPrefix="lastpage-margin"
+              disabled={!config.enabled}
+              top={config.marginTop}
+              right={config.marginRight}
+              bottom={config.marginBottom}
+              left={config.marginLeft}
+              onChange={(patch) =>
+                onChange({
+                  ...(patch.top !== undefined && { marginTop: patch.top }),
+                  ...(patch.right !== undefined && { marginRight: patch.right }),
+                  ...(patch.bottom !== undefined && { marginBottom: patch.bottom }),
+                  ...(patch.left !== undefined && { marginLeft: patch.left }),
+                })
+              }
+            />
+          </div>
+        )}
+
+        <div className="flex gap-2 pr-10">
+          <div className="flex flex-col items-start justify-between gap-2 w-full">
+            <Label htmlFor="lastpage-strip-radius" className="text-xs text-muted-foreground">
+              Радиус скругления
+            </Label>
+            <Input
+              id="lastpage-strip-radius"
               type="number"
               min={0}
+              max={40}
+              step={1}
               disabled={!config.enabled}
-              value={config.marginX}
+              value={config.stripBorderRadius}
               onChange={(e) => {
                 const parsed = Number(e.target.value)
-                if (Number.isFinite(parsed)) onChange({ marginX: Math.max(0, parsed) })
+                if (Number.isFinite(parsed)) onChange({ stripBorderRadius: parsed })
               }}
+              className="w-full"
             />
-          </InputGroup>
-          <InputGroup>
-            <InputGroupAddon>
-              <MoveVerticalIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              id="lastpage-margin-y"
-              type="number"
-              min={0}
-              disabled={!config.enabled}
-              value={config.marginY}
-              onChange={(e) => {
-                const parsed = Number(e.target.value)
-                if (Number.isFinite(parsed)) onChange({ marginY: Math.max(0, parsed) })
-              }}
-            />
-          </InputGroup>
+          </div>
+          <ColorField
+            id="lastpage-strip-background"
+            label="Цвет фона"
+            value={config.stripBackground}
+            disabled={!config.enabled}
+            onChange={(value) => onChange({ stripBackground: value })}
+          />
         </div>
       </div>
 
@@ -95,7 +159,7 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
         </div>
       </div>
 
-      <div className="flex px-4 py-3 min-w-xl ml-[-16px] bg-muted border-t border-b uppercase tracking-wide text-xs font-mono text-muted-foreground">Правая часть</div>
+      <div className="flex px-4 py-3 min-w-xl ml-[-16px] bg-muted border-t border-b uppercase tracking-wide text-xs font-mono text-muted-foreground">Права часть</div>
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4">

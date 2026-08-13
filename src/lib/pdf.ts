@@ -203,15 +203,14 @@ function drawRegion(
   }
 }
 
-async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPageConfig) {
-  if (!config.enabled) return
-
-  const existingPages = pdfDoc.getPages()
-  const width = existingPages.length > 0 ? existingPages[existingPages.length - 1].getSize().width : 595.28
-
+function computeLastPageStrip(
+  font: PDFFont,
+  config: LastPageConfig,
+  boxWidth: number,
+  logoImage: PDFImage | null,
+) {
   const fontSize = 10
-  const marginX = config.marginX
-  const marginY = config.marginY
+  const { paddingTop, paddingRight, paddingBottom, paddingLeft } = config
   const logoHeight = 32
   const logoTextGap = 12
   const leftColor = hexToRgb("#666666")
@@ -226,15 +225,10 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   const rightPadLeft = config.rightContainerEnabled ? config.rightContainerPaddingLeft : 0
   const rightOuterWidth = rightTextWidth + rightPadLeft + rightPadRight
 
-  let logoImage: PDFImage | null = null
-  if (config.showLogo) {
-    const logoBytes = await loadSvgAsPngBytes(LOGO_URL)
-    logoImage = await pdfDoc.embedPng(logoBytes)
-  }
   const logoWidth = logoImage ? logoHeight * (logoImage.width / logoImage.height) : 0
 
-  const leftTextX = marginX + (logoImage ? logoWidth + logoTextGap : 0)
-  const leftMaxWidth = width - leftTextX - marginX - (rightText ? rightOuterWidth + gapPt : 0)
+  const leftTextX = paddingLeft + (logoImage ? logoWidth + logoTextGap : 0)
+  const leftMaxWidth = boxWidth - leftTextX - paddingRight - (rightText ? rightOuterWidth + gapPt : 0)
 
   const leftLines = config.leftText.trim()
     ? layoutMultilineText(config.leftText.trim(), {
@@ -255,20 +249,89 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   const lineCount = Math.max(leftLines.length, 1)
   const textVisualHeight = leftLines.length > 0 || rightText ? totalHeight + (lineCount - 1) * lineHeight : 0
   const contentHeight = Math.max(textVisualHeight, logoImage ? logoHeight : 0, totalHeight, rightBlockHeight)
-  const stripHeight = contentHeight + marginY * 2
+  const stripHeight = contentHeight + paddingTop + paddingBottom
+  const contentCenterY = paddingBottom + contentHeight / 2
 
-  const page = pdfDoc.addPage([width, stripHeight])
+  return {
+    stripHeight,
+    contentCenterY,
+    paddingLeft,
+    paddingRight,
+    fontSize,
+    logoHeight,
+    logoWidth,
+    leftTextX,
+    leftLines,
+    leftColor,
+    ascent,
+    lineHeight,
+    textVisualHeight,
+    rightText,
+    rightTextWidth,
+    rightColor,
+    rightAscent,
+    rightDescent,
+    rightTotalHeight,
+    rightPadTop,
+    rightPadRight,
+    rightPadBottom,
+    rightPadLeft,
+    rightOuterWidth,
+  }
+}
+
+function drawLastPageStrip(
+  page: PDFPage,
+  boxX: number,
+  boxBottom: number,
+  boxWidth: number,
+  font: PDFFont,
+  config: LastPageConfig,
+  logoImage: PDFImage | null,
+  metrics: ReturnType<typeof computeLastPageStrip>,
+) {
+  const {
+    stripHeight,
+    contentCenterY,
+    paddingLeft,
+    paddingRight,
+    fontSize,
+    logoHeight,
+    logoWidth,
+    leftTextX,
+    leftLines,
+    leftColor,
+    ascent,
+    lineHeight,
+    textVisualHeight,
+    rightText,
+    rightTextWidth,
+    rightColor,
+    rightAscent,
+    rightDescent,
+    rightTotalHeight,
+    rightPadTop,
+    rightPadBottom,
+    rightPadLeft,
+    rightOuterWidth,
+  } = metrics
+
+  page.drawSvgPath(roundedRectPath(boxWidth, stripHeight, config.stripBorderRadius), {
+    x: boxX,
+    y: boxBottom + stripHeight,
+    color: hexToRgb(config.stripBackground),
+  })
 
   if (logoImage) {
-    const logoY = stripHeight / 2 - logoHeight / 2
-    page.drawImage(logoImage, { x: marginX, y: logoY, width: logoWidth, height: logoHeight })
+    const logoY = boxBottom + contentCenterY - logoHeight / 2
+    page.drawImage(logoImage, { x: boxX + paddingLeft, y: logoY, width: logoWidth, height: logoHeight })
   }
 
-  const firstBaseline = stripHeight / 2 + textVisualHeight / 2 - ascent
+  const firstBaseline = boxBottom + contentCenterY + textVisualHeight / 2 - ascent
 
   leftLines.forEach((line, idx) => {
     page.drawText(line.text, {
-      x: leftTextX,
+      x: boxX + leftTextX,
       y: firstBaseline - idx * lineHeight,
       size: fontSize,
       font,
@@ -277,25 +340,25 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
   })
 
   if (rightText) {
-    const boxX = width - marginX - rightOuterWidth
-    const x = boxX + rightPadLeft
-    const y = stripHeight / 2 - (rightAscent - rightDescent) / 2
+    const rightBoxX = boxX + boxWidth - paddingRight - rightOuterWidth
+    const x = rightBoxX + rightPadLeft
+    const y = boxBottom + contentCenterY - (rightAscent - rightDescent) / 2
 
     let linkRect: [number, number, number, number] = [x, y - rightDescent, x + rightTextWidth, y + rightAscent]
 
     if (config.rightContainerEnabled) {
       const boxHeight = rightTotalHeight + rightPadTop + rightPadBottom
-      const boxBottom = y - rightDescent - rightPadBottom
-      const boxTop = boxBottom + boxHeight
+      const rightBoxBottom = y - rightDescent - rightPadBottom
+      const rightBoxTop = rightBoxBottom + boxHeight
       page.drawSvgPath(roundedRectPath(rightOuterWidth, boxHeight, config.rightContainerBorderRadius), {
-        x: boxX,
-        y: boxTop,
+        x: rightBoxX,
+        y: rightBoxTop,
         color: hexToRgb(config.rightContainerBackground),
         borderColor:
           config.rightContainerBorderWidth > 0 ? hexToRgb(config.rightContainerBorderColor) : undefined,
         borderWidth: config.rightContainerBorderWidth > 0 ? config.rightContainerBorderWidth : undefined,
       })
-      linkRect = [boxX, boxBottom, boxX + rightOuterWidth, boxTop]
+      linkRect = [rightBoxX, rightBoxBottom, rightBoxX + rightOuterWidth, rightBoxTop]
     }
 
     page.drawText(rightText, { x, y, size: config.rightFontSize, font, color: rightColor })
@@ -305,6 +368,32 @@ async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPage
       addLinkAnnotation(page, rightLinkUrl, linkRect)
     }
   }
+}
+
+async function drawLastPage(pdfDoc: PDFDocument, font: PDFFont, config: LastPageConfig) {
+  if (!config.enabled) return
+
+  let logoImage: PDFImage | null = null
+  if (config.showLogo) {
+    const logoBytes = await loadSvgAsPngBytes(LOGO_URL)
+    logoImage = await pdfDoc.embedPng(logoBytes)
+  }
+
+  if (config.mode === "everyPage") {
+    for (const page of pdfDoc.getPages()) {
+      const pageWidth = page.getSize().width
+      const boxWidth = Math.max(0, pageWidth - config.marginLeft - config.marginRight)
+      const metrics = computeLastPageStrip(font, config, boxWidth, logoImage)
+      drawLastPageStrip(page, config.marginLeft, config.marginBottom, boxWidth, font, config, logoImage, metrics)
+    }
+    return
+  }
+
+  const existingPages = pdfDoc.getPages()
+  const width = existingPages.length > 0 ? existingPages[existingPages.length - 1].getSize().width : 595.28
+  const metrics = computeLastPageStrip(font, config, width, logoImage)
+  const page = pdfDoc.addPage([width, metrics.stripHeight])
+  drawLastPageStrip(page, 0, 0, width, font, config, logoImage, metrics)
 }
 
 export async function applyHeaderFooter(
@@ -318,14 +407,13 @@ export async function applyHeaderFooter(
   const font = await pdfDoc.embedFont(fontBytes, { subset: true })
 
   let regionLogoImage: PDFImage | null = null
-  if (config.header.showLogo || config.footer.showLogo) {
+  if (config.region.showLogo) {
     const logoBytes = await loadSvgAsPngBytes(LOGO_MONO_URL)
     regionLogoImage = await pdfDoc.embedPng(logoBytes)
   }
 
   for (const page of pdfDoc.getPages()) {
-    drawRegion(page, config.header, font, "top", regionLogoImage)
-    drawRegion(page, config.footer, font, "bottom", regionLogoImage)
+    drawRegion(page, config.region, font, config.region.position, regionLogoImage)
   }
 
   await drawLastPage(pdfDoc, font, config.lastPage)

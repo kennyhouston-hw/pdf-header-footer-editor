@@ -45,8 +45,7 @@ function App() {
 
   const files = mode === "single" ? (singleFile ? [singleFile] : []) : multipleFiles
 
-  const canExport =
-    files.length > 0 && (config.header.enabled || config.footer.enabled || config.lastPage.enabled)
+  const canExport = files.length > 0 && (config.region.enabled || config.lastPage.enabled)
 
   const handleExport = async () => {
     if (files.length === 0) return

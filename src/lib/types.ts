@@ -1,9 +1,12 @@
 export type Align = "left" | "center" | "right"
+export type VerticalPosition = "top" | "bottom"
+export type LastPageMode = "lastPage" | "everyPage"
 
 export interface RegionConfig {
   enabled: boolean
   text: string
   align: Align
+  position: VerticalPosition
   fontSize: number
   color: string
   marginPt: number
@@ -24,8 +27,17 @@ export interface RegionConfig {
 
 export interface LastPageConfig {
   enabled: boolean
-  marginX: number
-  marginY: number
+  mode: LastPageMode
+  paddingTop: number
+  paddingRight: number
+  paddingBottom: number
+  paddingLeft: number
+  marginTop: number
+  marginRight: number
+  marginBottom: number
+  marginLeft: number
+  stripBackground: string
+  stripBorderRadius: number
   showLogo: boolean
   leftText: string
   rightText: string
@@ -46,8 +58,7 @@ export interface LastPageConfig {
 }
 
 export interface HeaderFooterConfig {
-  header: RegionConfig
-  footer: RegionConfig
+  region: RegionConfig
   lastPage: LastPageConfig
 }
 
@@ -55,6 +66,7 @@ export const defaultRegionConfig = (overrides: Partial<RegionConfig> = {}): Regi
   enabled: false,
   text: "",
   align: "right",
+  position: "top",
   fontSize: 10,
   color: "#000000",
   marginPt: 16,
@@ -78,8 +90,17 @@ export const defaultLastPageConfig = (
   overrides: Partial<LastPageConfig> = {},
 ): LastPageConfig => ({
   enabled: true,
-  marginX: 16,
-  marginY: 16,
+  mode: "lastPage",
+  paddingTop: 16,
+  paddingRight: 16,
+  paddingBottom: 16,
+  paddingLeft: 16,
+  marginTop: 0,
+  marginRight: 0,
+  marginBottom: 0,
+  marginLeft: 0,
+  stripBackground: "#ffffff",
+  stripBorderRadius: 0,
   showLogo: true,
   leftText: "Материал разработан методической командой детской онлайн-школы Hello World",
   rightText: "Перейти на сайт",
@@ -101,7 +122,6 @@ export const defaultLastPageConfig = (
 })
 
 export const defaultConfig: HeaderFooterConfig = {
-  header: defaultRegionConfig({ text: "hwschool.online", enabled: true }),
-  footer: defaultRegionConfig({ text: "" }),
+  region: defaultRegionConfig({ text: "hwschool.online", enabled: true, position: "top" }),
   lastPage: defaultLastPageConfig(),
 }

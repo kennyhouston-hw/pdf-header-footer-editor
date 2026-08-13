@@ -1,7 +1,14 @@
-import { AlignCenterVertical, AlignEndVertical, AlignStartVertical } from "lucide-react"
+import {
+  AlignCenterVertical,
+  AlignEndVertical,
+  AlignStartVertical,
+  AlignStartHorizontal,
+  AlignEndHorizontal,
+} from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+import { Slider } from "@/components/ui/slider"
 import { Separator } from "@/components/ui/separator"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { LinkFields } from "@/components/LinkFields"
@@ -17,18 +24,22 @@ const alignLabels: Record<RegionConfig["align"], string> = {
   right: "Справа",
 }
 
+const positionLabels: Record<RegionConfig["position"], string> = {
+  top: "Верх страницы",
+  bottom: "Низ страницы",
+}
+
 interface RegionFormProps {
   region: RegionConfig
   onChange: (patch: Partial<RegionConfig>) => void
   idPrefix: string
-  enabledLabel: string
 }
 
-export function RegionForm({ region, onChange, idPrefix, enabledLabel }: RegionFormProps) {
+export function RegionForm({ region, onChange, idPrefix }: RegionFormProps) {
   return (
     <div className="flex flex-col gap-5 px-4">
       <div className="flex items-center justify-between">
-        <Label htmlFor={`${idPrefix}-enabled`}>{enabledLabel}</Label>
+        <Label htmlFor={`${idPrefix}-enabled`}>Добавить колонтитул</Label>
         <Switch
           id={`${idPrefix}-enabled`}
           checked={region.enabled}
@@ -38,48 +49,65 @@ export function RegionForm({ region, onChange, idPrefix, enabledLabel }: RegionF
 
       <Separator className="min-w-2xl ml-[-16px]" />
 
-      <div className="flex gap-3">
+
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 w-full">
           <Label htmlFor={`${idPrefix}-align`} className="text-xs text-muted-foreground">
             Выравнивание
           </Label>
-          <ToggleGroup
-            className="w-full "
-            value={[region.align]}
-            disabled={!region.enabled}
-            onValueChange={(value) => {
-              const next = value[0] as RegionConfig["align"] | undefined
-              if (next) onChange({ align: next })
-            }}
-          >
-            <ToggleGroupItem className="h-[26px]" value="left" aria-label={alignLabels.left}>
-              <AlignStartVertical />
-            </ToggleGroupItem>
-            <ToggleGroupItem className="h-[26px]" value="center" aria-label={alignLabels.center}>
-              <AlignCenterVertical />
-            </ToggleGroupItem>
-            <ToggleGroupItem className="h-[26px]" value="right" aria-label={alignLabels.right}>
-              <AlignEndVertical />
-            </ToggleGroupItem>
-          </ToggleGroup>
+          <div className="flex gap-2">
+            <ToggleGroup
+              className="w-full "
+              value={[region.align]}
+              disabled={!region.enabled}
+              onValueChange={(value) => {
+                const next = value[0] as RegionConfig["align"] | undefined
+                if (next) onChange({ align: next })
+              }}
+            >
+              <ToggleGroupItem className="h-[26px]" value="left" aria-label={alignLabels.left}>
+                <AlignStartVertical />
+              </ToggleGroupItem>
+              <ToggleGroupItem className="h-[26px]" value="center" aria-label={alignLabels.center}>
+                <AlignCenterVertical />
+              </ToggleGroupItem>
+              <ToggleGroupItem className="h-[26px]" value="right" aria-label={alignLabels.right}>
+                <AlignEndVertical />
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <ToggleGroup
+              className="w-full "
+              value={[region.position]}
+              disabled={!region.enabled}
+              onValueChange={(value) => {
+                const next = value[0] as RegionConfig["position"] | undefined
+                if (next) onChange({ position: next })
+              }}
+            >
+              <ToggleGroupItem className="h-[26px]" value="top" aria-label={positionLabels.top}>
+                <AlignStartHorizontal />
+              </ToggleGroupItem>
+              <ToggleGroupItem className="h-[26px]" value="bottom" aria-label={positionLabels.bottom}>
+                <AlignEndHorizontal />
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </div>
-        <div className="flex flex-col items-start gap-2 w-36">
-          <Label htmlFor={`${idPrefix}-margin`} className="text-xs text-muted-foreground">
-            Отступ от края
-          </Label>
-          <Input
+        <div className="flex flex-col gap-2 w-full">
+          <div className="flex items-center justify-between">
+            <Label htmlFor={`${idPrefix}-margin`} className="text-xs text-muted-foreground">
+              Отступ от края
+            </Label>
+            <span className="text-sm text-muted-foreground">{region.marginPt}pt</span>
+          </div>
+          <Slider
             id={`${idPrefix}-margin`}
-            type="number"
+            value={[region.marginPt]}
             min={10}
             max={72}
             step={1}
             disabled={!region.enabled}
-            value={region.marginPt}
-            onChange={(e) => {
-              const parsed = Number(e.target.value)
-              if (Number.isFinite(parsed)) onChange({ marginPt: parsed })
-            }}
-            className="w-full"
+            onValueChange={(val) => onChange({ marginPt: Array.isArray(val) ? val[0] : val })}
           />
         </div>
       </div>
