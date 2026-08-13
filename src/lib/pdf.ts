@@ -209,11 +209,11 @@ function computeLastPageStrip(
   boxWidth: number,
   logoImage: PDFImage | null,
 ) {
-  const fontSize = 10
+  const fontSize = config.leftFontSize
   const { paddingTop, paddingRight, paddingBottom, paddingLeft } = config
   const logoHeight = 32
   const logoTextGap = 12
-  const leftColor = hexToRgb("#666666")
+  const leftColor = hexToRgb(config.leftColor)
   const rightColor = hexToRgb(config.rightColor)
   const rightText = config.rightText.trim()
   const rightTextWidth = rightText ? font.widthOfTextAtSize(rightText, config.rightFontSize) : 0

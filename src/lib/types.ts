@@ -40,6 +40,8 @@ export interface LastPageConfig {
   stripBorderRadius: number
   showLogo: boolean
   leftText: string
+  leftFontSize: number
+  leftColor: string
   rightText: string
   rightLinkUrl: string
   rightUtmSource: string
@@ -103,6 +105,8 @@ export const defaultLastPageConfig = (
   stripBorderRadius: 0,
   showLogo: true,
   leftText: "Материал разработан методической командой детской онлайн-школы Hello World",
+  leftFontSize: 10,
+  leftColor: "#666666",
   rightText: "Перейти на сайт",
   rightLinkUrl: "https://hwschool.online/",
   rightUtmSource: "",

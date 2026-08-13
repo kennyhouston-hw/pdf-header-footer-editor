@@ -146,6 +146,36 @@ export function LastPageForm({ config, onChange }: LastPageFormProps) {
           />
         </div>
 
+        <div className="flex gap-2 w-full">
+          <div className="flex flex-col items-start justify-between gap-2 w-full">
+            <Label htmlFor="lastpage-left-fontsize" className="text-xs text-muted-foreground">
+              Размер шрифта
+            </Label>
+            <Input
+              id="lastpage-left-fontsize"
+              type="number"
+              min={6}
+              max={24}
+              step={1}
+              disabled={!config.enabled}
+              value={config.leftFontSize}
+              onChange={(e) => {
+                const parsed = Number(e.target.value)
+                if (Number.isFinite(parsed)) onChange({ leftFontSize: parsed })
+              }}
+              className="w-full"
+            />
+          </div>
+
+          <ColorField
+            id="lastpage-left-color"
+            label="Цвет текста"
+            value={config.leftColor}
+            disabled={!config.enabled}
+            onChange={(value) => onChange({ leftColor: value })}
+          />
+        </div>
+
         <div className="flex items-center gap-2">
           <Checkbox
             id="lastpage-logo"
